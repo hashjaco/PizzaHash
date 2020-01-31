@@ -1,3 +1,7 @@
+import numpy as np
+import dask.array as da
+from PizzaEvent import PizzaEvent
+from time import perf_counter
 
 # data sets ordered by size, ascending
 set_a = open('data/a_example.in', 'r', encoding='utf-8')
@@ -7,14 +11,12 @@ set_d = open('data/d_quite_big.in', 'r', encoding='utf-8')
 set_e = open('data/e_also_big.in', 'r', encoding='utf-8')
 
 
-def getData(file):
-    max_slices, num_types = file.readline().replace("\n", "").split(" ")
-    pizza_weights = file.readline().replace("\n", "").split(" ")
+if __name__ == "__main__":
+    pizzaEvent = PizzaEvent(set_c)
 
-    return max_slices, num_types, pizza_weights
+    start = perf_counter()
+    solution = pizzaEvent.findCombination()
+    stop = perf_counter()
 
-
-max_slices, num_types, pizza_weights = getData(set_a)
-print(max_slices)
-print(num_types)
-print(pizza_weights)
+    print(solution)
+    print(f"\nSolution found in {stop - start} seconds.")
