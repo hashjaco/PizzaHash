@@ -21,7 +21,7 @@ def buildPizzaDictionary(num_of_slice_list: []):
 
     try:
         for x in range(size):
-            pizza_dict.update({int(num_of_slice_list[x]) : (f'pizza {x + 1}', 10)})
+            pizza_dict.update({int(num_of_slice_list[x]) : f"pizza {x + 1}"})
 
         return pizza_dict
     except IndexError:
@@ -30,34 +30,75 @@ def buildPizzaDictionary(num_of_slice_list: []):
 
 
 def findCombination(max_slices: int, pizzas: dict):
-    pizza_types = []
+    print("Finding combination of pizzas that will maximize the number of slices we can get for the event without going over the max allowed...This may take some time for outrageously large sets...")
     pizza_slices = []
-    pizza_values = []
-    for item in pizzas.values():
-        pizza_types.append(item[0])
-        pizza_values.append(item[1])
+
     for item in pizzas.keys():
         pizza_slices.append(item)
-    print(f'Pizza types: {repr(pizza_types)}')
     print(f'Pizza slices for each type: {repr(pizza_slices)}')
-    print(f'Pizza values for each type: {repr(pizza_values)}')
     num_pizzas = len(pizzas)
     assert num_pizzas > 0 and max_slices > 0
-    knapsack_matrix = np.array([[0 for x in range(max_slices + 1)] for x in range(num_pizzas+1)])
+    print("Initializing matrix...")
+    matrix = np.array([[0 for x in range(max_slices + 1)] for x in range(num_pizzas)])
 
-    ''' Fix this part. The cells should be assigned either 0 or 1, then we can figure out the max number of slices that we can possibly get. '''
-    # print('\n', repr(knapsack_matrix))
-    for row in range(num_pizzas-1):
+    matrix = fillMatrix(matrix, num_pizzas, pizza_slices)
+
+    max_possible, curr_row = getMaxPossible(matrix, num_pizzas, max_slices)
+
+    return getSubsetSolution(matrix, max_possible, curr_row, pizza_slices)
+
+
+def fillMatrix(matrix, num_pizzas: int, pizza_slices: []):
+    print("Filling matrix...this may take a while for large sets")
+
+    for row in range(num_pizzas):
         for column in range(0, max_slices+1):
             slices = pizza_slices[row]
-            value = pizza_values[row]
-            if column == 0:
-                knapsack_matrix[row][column] = 0
-            elif slices <= column:
-                knapsack_matrix[row][column] = max(knapsack_matrix[row - 1][column] + value, knapsack_matrix[row - 1][column])
+            if column != 0:
+                if column == slices:
+                    matrix[row][column] = 1
+                elif row == 0 and column != slices:
+                    matrix[row][column] = 0
+                elif matrix[row-1][column] == 1:
+                    matrix[row][column] = 1
+                else:
+                    matrix[row][column] = matrix[row-1][column-slices]
             else:
-                knapsack_matrix[row][column] = knapsack_matrix[row - 1][column]
-    return
+                matrix[row][column] = 0
+    return matrix
+
+
+def getMaxPossible(matrix, num_pizzas, max_slices):
+    print("Getting the maximum amount of slices we can get. This may take a while for very large sets...")
+    index_value, curr_row, max_possible = matrix[num_pizzas - 1][max_slices], num_pizzas - 1, max_slices
+
+    while index_value != 1:
+        if curr_row and max_possible == 0:
+            print(f"Solution does not exist for some reason.")
+            return
+        elif max_possible == 0:
+            curr_column, curr_row = max_slices + 1, curr_row - 1
+        max_possible -= 1
+        index_value = matrix[curr_row][max_possible]
+
+    print(f"Max possible slices: {max_possible}")
+    return max_possible, curr_row
+
+
+
+def getSubsetSolution(matrix, curr_column: int, curr_row: int, pizza_slices: []):
+    print("Getting solution...")
+    solution = []
+    solution_slices = []
+    while curr_column != 0:
+        if curr_row != 0 and matrix[curr_row-1][curr_column] == 1:
+            curr_row -= 1
+        else:
+            solution.append(f"pizza {curr_row + 1}")
+            solution_slices.append(pizza_slices[curr_row])
+            curr_column -= pizza_slices[curr_row]
+    print(f"A solution is {repr(solution)} with a total of {sum(solution_slices)} slices!")
+    return solution
 
 
 ''' In case we can't assume that the given list is sorted, here's quicksort '''
@@ -82,18 +123,16 @@ def quickSort(arr, low, high):
         quickSort(arr, partition_index + 1, high)
 
 
-max_slices, num_types, pizza_weights = getData(set_a)
+max_slices, num_types, pizza_weights = getData(set_c)
 pizza_dictionary = buildPizzaDictionary(pizza_weights)
-some_array = [4, 2, 6, 123, 53, 2, -2, 444, 23, 12, -354] # testing quicksort algorithm
+some_array = [4, 2, 6, 123, 53, 2, -2, 444, 23, 12, -354]  # testing quicksort algorithm
 
 ''' Tests '''
 
 print(f'Max number of slices for event: {max_slices}')
 print(f'Number of different types of pizza: {num_types}')
 print(f'Amount of slices for each pizza: {pizza_weights}\n')
-print(f'Dictionary: {pizza_dictionary}\n')
-
-print(f'Results of findCombination: {findCombination(max_slices, pizza_dictionary)}')
+solution = findCombination(max_slices, pizza_dictionary)
 
 print(f"Quicksort: {some_array}\n")
 size = len(some_array)
