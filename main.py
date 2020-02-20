@@ -49,13 +49,13 @@ if __name__ == "__main__":
         solutionE_performance = alg5_stop - alg5_start
 
         print(f"Solution found in {solutionA_performance} seconds.\n")
-        num_pizzas = len(solution_a)
-        pizzas = " ".join(map(str, sorted(list(solution_a.keys()))))
+        num_pizzasA = len(solution_a)
+        pizzasA = " ".join(map(str, sorted(list(solution_a.keys()))))
         print(sum(solution_a.values()))
 
         print(f"Solution found in {solutionB_performance} seconds.\n")
-        num_pizzas = len(solution_b)
-        pizzas = " ".join(map(str, sorted(list(solution_b.keys()))))
+        num_pizzasB = len(solution_b)
+        pizzasB = " ".join(map(str, sorted(list(solution_b.keys()))))
         print(sum(solution_b.values()))
 
         print(f"Solution found in {solutionC_performance} seconds.\n")
@@ -73,17 +73,27 @@ if __name__ == "__main__":
         pizzasE = " ".join(map(str, sorted(list(solution_e.keys()))))
         print(sum(solution_e.values()))
 
-        file = open(f'data/c_output', 'w', encoding='utf-8')
+        file = open(f'data/a_output.in', 'w', encoding='utf-8')
+        file.write(str(num_pizzasA) + '\n')
+        file.write(pizzasA)
+        file.close()
+
+        file = open(f'data/b_output.in', 'w', encoding='utf-8')
+        file.write(str(num_pizzasB) + '\n')
+        file.write(pizzasB)
+        file.close()
+
+        file = open(f'data/c_output.in', 'w', encoding='utf-8')
         file.write(str(num_pizzasC) + '\n')
         file.write(pizzasC)
         file.close()
 
-        file = open(f'data/d_output', 'w', encoding='utf-8')
+        file = open(f'data/d_output.in', 'w', encoding='utf-8')
         file.write(str(num_pizzasD) + '\n')
         file.write(pizzasD)
         file.close()
 
-        file = open(f'data/e_output', 'w', encoding='utf-8')
+        file = open(f'data/e_output.in', 'w', encoding='utf-8')
         file.write(str(num_pizzasE) + '\n')
         file.write(pizzasE)
         file.close()
