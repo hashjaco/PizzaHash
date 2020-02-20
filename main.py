@@ -49,29 +49,43 @@ if __name__ == "__main__":
         solutionE_performance = alg5_stop - alg5_start
 
         print(f"Solution found in {solutionA_performance} seconds.\n")
-        print(len(solution_a))
-        print(" ".join(map(str, sorted(list(solution_a.keys())))), end='\n')
+        num_pizzas = len(solution_a)
+        pizzas = " ".join(map(str, sorted(list(solution_a.keys()))))
         print(sum(solution_a.values()))
 
         print(f"Solution found in {solutionB_performance} seconds.\n")
-        print(len(solution_b))
-        print(" ".join(map(str, sorted(list(solution_b.keys())))), end='\n')
+        num_pizzas = len(solution_b)
+        pizzas = " ".join(map(str, sorted(list(solution_b.keys()))))
         print(sum(solution_b.values()))
 
         print(f"Solution found in {solutionC_performance} seconds.\n")
-        print(len(solution_c))
-        print(" ".join(map(str, sorted(list(solution_c.keys())))), end='\n')
+        num_pizzasC = len(solution_c)
+        pizzasC = " ".join(map(str, sorted(list(solution_c.keys()))))
         print(sum(solution_c.values()))
 
         print(f"Solution found in {solutionD_performance} seconds.\n")
-        print(len(solution_d))
-        print(" ".join(map(str, sorted(list(solution_d.keys())))), end='\n')
+        num_pizzasD = len(solution_d)
+        pizzasD = " ".join(map(str, sorted(list(solution_d.keys()))))
         print(sum(solution_d.values()))
 
         print(f"Solution found in {solutionE_performance} seconds.\n")
-        print(len(solution_e))
-        print(" ".join(map(str, sorted(list(solution_e.keys())))), end='\n')
+        num_pizzasE = len(solution_e)
+        pizzasE = " ".join(map(str, sorted(list(solution_e.keys()))))
         print(sum(solution_e.values()))
 
+        file = open(f'data/c_output', 'w', encoding='utf-8')
+        file.write(str(num_pizzasC) + '\n')
+        file.write(pizzasC)
+        file.close()
+
+        file = open(f'data/d_output', 'w', encoding='utf-8')
+        file.write(str(num_pizzasD) + '\n')
+        file.write(pizzasD)
+        file.close()
+
+        file = open(f'data/e_output', 'w', encoding='utf-8')
+        file.write(str(num_pizzasE) + '\n')
+        file.write(pizzasE)
+        file.close()
     except KeyError:
         print(KeyError)
