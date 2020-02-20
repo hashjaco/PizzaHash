@@ -14,13 +14,13 @@ if __name__ == "__main__":
     set_e = 'e_also_big.in'
 
     try:
-        pizzaEvent = PizzaEvent(set_b)
+        pizzaEvent = PizzaEvent(set_c)
 
         alg1_start = perf_counter()
         solution1 = pizzaEvent.findCombination()
         alg1_stop = perf_counter()
 
-        pizzaEvent2 = PizzaEvent(set_b)
+        pizzaEvent2 = PizzaEvent(set_d)
 
         alg2_start = perf_counter()
         solution2 = pizzaEvent2.shimmySearch2()
